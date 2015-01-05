@@ -4,36 +4,58 @@ using System.Collections;
 
 public class ThirdPersonNetworkVik : Photon.MonoBehaviour
 {
-    ThirdPersonCameraNET cameraScript;
-    ThirdPersonControllerNET controllerScript;
-    private bool appliedInitialUpdate;
+	OrthographicCameraNET cameraScript;
+	OrthoThirdPersonControllerNET controllerScript;
+	AIControllerNET controllerScriptAI;
 
+    private bool appliedInitialUpdate;
+	private bool isAI;
     void Awake()
     {
-        cameraScript = GetComponent<ThirdPersonCameraNET>();
-        controllerScript = GetComponent<ThirdPersonControllerNET>();
+		bool? isPlayerController = GetComponent<OrthoThirdPersonControllerNET>()==null;
+		isAI = isPlayerController ?? true;
 
+		if (isAI)
+		{
+			cameraScript = null;
+			controllerScript=null;
+			controllerScriptAI = GetComponent<AIControllerNET>();
+		}
+		else
+		{
+			cameraScript = GetComponent<OrthographicCameraNET>();
+			controllerScript = GetComponent<OrthoThirdPersonControllerNET>();
+		}
+		
     }
     void Start()
     {
         //TODO: Bugfix to allow .isMine and .owner from AWAKE!
-        if (photonView.isMine)
+		if (isAI)
+		{
+			controllerScriptAI.enabled=true;
+			controllerScriptAI.SetIsRemotePlayer(true);
+		}
+
+        else if (photonView.isMine)
         {
             //MINE: local player, simply enable the local scripts
             cameraScript.enabled = true;
             controllerScript.enabled = true;
             Camera.main.transform.parent = transform;
-            Camera.main.transform.localPosition = new Vector3(0, 2, -10);
+            Camera.main.transform.localPosition = new Vector3(-5, 2, 0);
             Camera.main.transform.localEulerAngles = new Vector3(10, 0, 0);
+			Camera.main.transform.parent=null;
+			controllerScript.SetIsRemotePlayer(!photonView.isMine);
 
         }
         else
         {           
             cameraScript.enabled = false;
             controllerScript.enabled = true;
-
+			controllerScript.SetIsRemotePlayer(!photonView.isMine);
         }
-        controllerScript.SetIsRemotePlayer(!photonView.isMine);
+        
 
         gameObject.name = gameObject.name + photonView.viewID;
     }
@@ -83,13 +105,16 @@ public class ThirdPersonNetworkVik : Photon.MonoBehaviour
     void OnPhotonInstantiate(PhotonMessageInfo info)
     {
         //We know there should be instantiation data..get our bools from this PhotonView!
-        object[] objs = photonView.instantiationData; //The instantiate data..
-        bool[] mybools = (bool[])objs[0];   //Our bools!
+		if (photonView.instantiationData != null)
+		{
+	        object[] objs = photonView.instantiationData; //The instantiate data..
+	        bool[] mybools = (bool[])objs[0];   //Our bools!
 
-        //disable the axe and shield meshrenderers based on the instantiate data
-        MeshRenderer[] rens = GetComponentsInChildren<MeshRenderer>();
-        rens[0].enabled = mybools[0];//Axe
-        rens[1].enabled = mybools[1];//Shield
+	        //disable the axe and shield meshrenderers based on the instantiate data
+	        MeshRenderer[] rens = GetComponentsInChildren<MeshRenderer>();
+	        rens[0].enabled = false;//Axe
+	        rens[1].enabled = false;//Shield
+		}
 
     }
 

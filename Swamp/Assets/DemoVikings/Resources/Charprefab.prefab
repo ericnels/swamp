@@ -10,12 +10,13 @@ GameObject:
   - 4: {fileID: 400006}
   - 136: {fileID: 13600000}
   - 54: {fileID: 5400000}
-  - 114: {fileID: 11400006}
-  - 114: {fileID: 11400004}
   - 114: {fileID: 11400002}
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400008}
   - 114: {fileID: 11400010}
+  - 114: {fileID: 11400012}
+  - 114: {fileID: 11400014}
+  - 135: {fileID: 13500000}
   m_Layer: 0
   m_Name: Charprefab
   m_TagString: Untagged
@@ -1116,64 +1117,9 @@ MonoBehaviour:
 --- !u!1002 &11400003
 EditorExtensionImpl:
   serializedVersion: 6
---- !u!114 &11400004
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100006}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2c7b9e828b49874882b1eb7db09a008, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 5400000}
-  speed: .400000006
-  walkSpeedDownscale: 2
-  turnSpeed: 1.62078571
-  mouseTurnSpeed: .300000012
-  jumpSpeed: 6
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  groundedCheckOffset: .699999988
-  showGizmos: 1
-  requireLock: 1
-  controlLock: 0
 --- !u!1002 &11400005
 EditorExtensionImpl:
   serializedVersion: 6
---- !u!114 &11400006
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100006}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 521a6423455b24049a19bf2f4bc7cef6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 13600000}
-  camera: {fileID: 0}
-  obstacleLayers:
-    serializedVersion: 2
-    m_Bits: 256
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 256
-  groundedCheckOffset: .699999988
-  rotationUpdateSpeed: 60
-  lookUpSpeed: 20
-  distanceUpdateSpeed: 10
-  followUpdateSpeed: 10
-  maxForwardAngle: 80
-  minDistance: .100000001
-  maxDistance: 10
-  zoomSpeed: 500
-  showGizmos: 1
-  requireLock: 1
-  controlLock: 1
 --- !u!1002 &11400007
 EditorExtensionImpl:
   serializedVersion: 6
@@ -1214,6 +1160,58 @@ MonoBehaviour:
 --- !u!1002 &11400011
 EditorExtensionImpl:
   serializedVersion: 6
+--- !u!114 &11400012
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ee6f3f4258674ae0bd29e1c01c857ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 13600000}
+  camera: {fileID: 0}
+--- !u!114 &11400014
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01395a89ddc774cfc9d3e742d5cfef2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 5400000}
+  speed: 1
+  walkSpeedDownscale: 2
+  turnSpeed: 2
+  mouseTurnSpeed: .300000012
+  jumpSpeed: 1
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  groundedCheckOffset: .699999988
+  isRemotePlayer: 1
+  canTurnHorizontal: 0
+  canTurnVertical: 0
+  isHorizontal: 1
+  searchNight: 1
+  AISpawnPoint: {x: 0, y: 0, z: 0}
+--- !u!135 &13500000
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100006}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 7
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!136 &13600000
 CapsuleCollider:
   m_ObjectHideFlags: 1

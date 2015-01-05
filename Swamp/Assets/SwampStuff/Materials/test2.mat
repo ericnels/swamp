@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: test2
-  m_Shader: {fileID: 4800000, guid: 5f03dd03f4f8eba42b58872824058345, type: 3}
+  m_Shader: {fileID: 4800000, guid: 825fbc0f26988b640ade3c4d81b73ed6, type: 3}
   m_ShaderKeywords: []
   m_CustomRenderQueue: -1
   m_SavedProperties:
@@ -28,6 +28,18 @@ Material:
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
     m_Floats:
+      data:
+        first:
+          name: _InvFade
+        second: .519464314
+      data:
+        first:
+          name: _SDist
+        second: .529999971
+      data:
+        first:
+          name: _Int
+        second: .00999999978
       data:
         first:
           name: _RimPower
@@ -58,24 +70,12 @@ Material:
         second: 1
       data:
         first:
-          name: _InvFade
-        second: .519464314
-      data:
-        first:
           name: _CenX
         second: .5
       data:
         first:
           name: _CenY
         second: .5
-      data:
-        first:
-          name: _SDist
-        second: .529999971
-      data:
-        first:
-          name: _Int
-        second: .00999999978
       data:
         first:
           name: _RInt
@@ -85,6 +85,10 @@ Material:
         first:
           name: _Color
         second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _TintColor
+        second: {r: .952941179, g: .925490201, b: .0509803928, a: .501960814}
       data:
         first:
           name: _DiffuseColor
@@ -109,10 +113,6 @@ Material:
         first:
           name: _Rim_Color
         second: {r: 1, g: 1, b: 1, a: 1}
-      data:
-        first:
-          name: _TintColor
-        second: {r: .952941179, g: .925490201, b: .0509803928, a: .501960814}
       data:
         first:
           name: _EditorTime

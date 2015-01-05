@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-[RequireComponent (typeof (ThirdPersonControllerNET))]
+
 public class AnimationController : MonoBehaviour
 {
 	enum CharacterState
@@ -31,11 +31,13 @@ public class AnimationController : MonoBehaviour
 			// Reduces the duration of the landing animation when the rigidbody has hoizontal movement
 	
 	
-	private ThirdPersonControllerNET controller;
+	private OrthoThirdPersonControllerNET controller;
+	private AIControllerNET controllerAI;
 	private CharacterState state = CharacterState.Falling;
 	private bool canLand = true;
 	private float currentRotation;
 	private Vector3 lastRootForward;
+	private bool isAI=false;
 	
 	
 	private Vector3 HorizontalMovement
@@ -76,10 +78,22 @@ public class AnimationController : MonoBehaviour
 			// Retry setup if references were cleared post-add
 			
 		if (VerifySetup ())
-		{
-			controller = GetComponent<ThirdPersonControllerNET> ();
-			controller.onJump += OnJump;
+		{	
+			bool? isPlayerController = GetComponent<OrthoThirdPersonControllerNET>()==null;
+			isAI = isPlayerController ?? true;
+			if (isAI)
+			{
+				controllerAI = GetComponent<AIControllerNET>();
+			}
+			else
+			{
+				controller = GetComponent<OrthoThirdPersonControllerNET> ();
+				controller.onJump += OnJump;
 				// Have OnJump invoked when the ThirdPersonController starts a jump
+			}
+
+
+
 			currentRotation = 0.0f;
 			lastRootForward = root.forward;
 		}
@@ -137,9 +151,19 @@ public class AnimationController : MonoBehaviour
 	void Fall ()
 	// End a jump and transition to a falling state (ignore if already grounded)
 	{
-		if (controller.Grounded)
+		if (!isAI)
 		{
-			return;
+			if (controller.Grounded)
+			{
+				return;
+			}
+		}
+		else
+		{
+			if (controllerAI.Grounded)
+			{
+				return;
+			}
 		}
 		state = CharacterState.Falling;
 	}
@@ -159,16 +183,34 @@ public class AnimationController : MonoBehaviour
 	void FixedUpdate ()
 	// Handle changes in groundedness
 	{
-		if (controller.Grounded)
+
+		if (!isAI)
 		{
-			if (state == CharacterState.Falling || (state == CharacterState.Jumping && canLand))
+			if (controller.Grounded)
 			{
-				OnLand ();
+				if (state == CharacterState.Falling || (state == CharacterState.Jumping && canLand))
+				{
+					OnLand ();
+				}
+			}
+			else if (state == CharacterState.Jumping)
+			{
+				canLand = true;
 			}
 		}
-		else if (state == CharacterState.Jumping)
+		else
 		{
-			canLand = true;
+			if (controllerAI.Grounded)
+			{
+				if (state == CharacterState.Falling || (state == CharacterState.Jumping && canLand))
+				{
+					OnLand ();
+				}
+			}
+			else if (state == CharacterState.Jumping)
+			{
+				canLand = true;
+			}
 		}
 	}
 

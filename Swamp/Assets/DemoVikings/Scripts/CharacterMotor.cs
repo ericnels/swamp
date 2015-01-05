@@ -13,12 +13,22 @@ public class CharacterMotor : MonoBehaviour
     bool canControl = true;
     bool useFixedUpdate = true;
 
+	public float groundedCheckOffset = 0.7f;
+	//makes character land on feet
+	private const float groundedDistance = 0.5f;
+	// Tweak if character lands too soon or gets stuck "in air" often
+	public LayerMask groundLayers = LayerMask.NameToLayer("Ground");
+	// Which layers should be walkable?
+	// NOTICE: Make sure that the target collider is not in any of these layers!groundlay
+	
     // For the next variables, [System.NonSerialized] tells Unity to not serialize the variable or show it in the inspector view.
     // Very handy for organization!
 
     // The current global direction we want the character to move in.
     [System.NonSerialized]
     public Vector3 inputMoveDirection = Vector3.zero;
+
+	public Rigidbody target;
 
     // Is the jump button held down? We use this interface instead of checking
     // for the jump button directly so this script can also be used by AIs.
@@ -29,7 +39,7 @@ public class CharacterMotor : MonoBehaviour
     public class CharacterMotorMovement
     {
         // The maximum horizontal speed when moving
-        public float maxForwardSpeed = 3.0f;
+        public float maxForwardSpeed = .4f;
         public float maxSidewaysSpeed = 2.0f;
         public float maxBackwardsSpeed = 2.0f;
 
@@ -37,12 +47,12 @@ public class CharacterMotor : MonoBehaviour
         public AnimationCurve slopeSpeedMultiplier = new AnimationCurve(new Keyframe(-90, 1), new Keyframe(0, 1), new Keyframe(90, 0));
 
         // How fast does the character change speeds?  Higher is faster.
-        public float maxGroundAcceleration = 30.0f;
-        public float maxAirAcceleration = 20.0f;
+        public float maxGroundAcceleration = .1f;
+        public float maxAirAcceleration = 2.0f;
 
         // The gravity for the character
-        public float gravity = 9.81f;
-        public float maxFallSpeed = 20.0f;
+        public float gravity = 1.0f;
+        public float maxFallSpeed = 2.0f;
 
         // For the next variables, [System.NonSerialized] tells Unity to not serialize the variable or show it in the inspector view.
         // Very handy for organization!
@@ -165,7 +175,7 @@ public class CharacterMotor : MonoBehaviour
         public bool enabled = true;
 
         // How fast does the character slide on steep surfaces?
-        public float slidingSpeed = 15.0f;
+        public float slidingSpeed = .5f;
 
         // How much can the player control the sliding direction?
         // ifthe value is 0.5 the player can slide sideways with half the speed of the downwards sliding speed.
@@ -377,6 +387,7 @@ public class CharacterMotor : MonoBehaviour
         if(!canControl)
             inputMoveDirection = Vector3.zero;
 
+
         // Find desired velocity
         Vector3 desiredVelocity;
         if(grounded && TooSteep())
@@ -400,7 +411,10 @@ public class CharacterMotor : MonoBehaviour
         }
 
         if(grounded)
+		{
             desiredVelocity = AdjustGroundVelocityToNormal(desiredVelocity, groundNormal);
+			velocity.y = Mathf.Min(velocity.y, 0);
+		}
         else
             velocity.y = 0;
 
@@ -459,7 +473,7 @@ public class CharacterMotor : MonoBehaviour
             }
 
             // Make sure we don't fall any faster than maxFallSpeed. This gives our character a terminal velocity.
-            velocity.y = Mathf.Max(velocity.y, -movement.maxFallSpeed);
+            velocity.y = Mathf.Max(velocity.y, movement.maxFallSpeed);
         }
 
         if(grounded)
@@ -547,10 +561,11 @@ public class CharacterMotor : MonoBehaviour
 
     private bool MoveWithPlatform()
     {
-        return (movingPlatform.enabled
+       /* return (movingPlatform.enabled
             && (grounded || movingPlatform.movementTransfer == MovementTransferOnJump.PermaLocked)
             && movingPlatform.activePlatform != null
-        );
+        );*/
+		return false;
     }
 
     private Vector3 GetDesiredHorizontalVelocity()
@@ -575,9 +590,15 @@ public class CharacterMotor : MonoBehaviour
 
     private bool IsGroundedTest()
     {
-        return (groundNormal.y > 0.01);
-    }
-
+		return Physics.Raycast (
+			target.transform.position + target.transform.up * -groundedCheckOffset,
+			target.transform.up * -1,
+			groundedDistance,
+			groundLayers
+			);
+		// Shoot a ray downward to see if we're touching the ground
+	}
+	
     float GetMaxAcceleration(bool grounded)
     {
         // Maximum acceleration on ground and in air
@@ -616,7 +637,8 @@ public class CharacterMotor : MonoBehaviour
 
     bool TooSteep()
     {
-        return (groundNormal.y <= Mathf.Cos(controller.slopeLimit * Mathf.Deg2Rad));
+		return false;
+		//return (groundNormal.y <= Mathf.Cos(controller.slopeLimit * Mathf.Deg2Rad));
     }
 
     Vector3 GetDirection()
