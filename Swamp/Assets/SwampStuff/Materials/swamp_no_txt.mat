@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: swamp_no_txt
-  m_Shader: {fileID: 4800000, guid: 1a68e62fa3d4b4b52a7fa6790416d602, type: 3}
+  m_Shader: {fileID: 4800000, guid: 5f7c482f8e0ac4b76a3b71ae584d7b2e, type: 3}
   m_ShaderKeywords: []
   m_CustomRenderQueue: -1
   m_SavedProperties:
@@ -29,6 +29,26 @@ Material:
         first:
           name: _Glossiness
         second: .100000001
+      data:
+        first:
+          name: _base_height
+        second: 0
+      data:
+        first:
+          name: _height_blur
+        second: .800000012
+      data:
+        first:
+          name: _top_rim_offset
+        second: 0
+      data:
+        first:
+          name: _top_rim_blur
+        second: 0
+      data:
+        first:
+          name: _Vertexpower
+        second: 1
     m_Colors:
       data:
         first:
@@ -46,3 +66,15 @@ Material:
         first:
           name: _SpecularColor
         second: {r: .0333044939, g: .323529422, b: 0, a: 1}
+      data:
+        first:
+          name: _top_color
+        second: {r: .352941185, g: .239215687, b: .184313729, a: 1}
+      data:
+        first:
+          name: _bottom_color
+        second: {r: .188235298, g: 0, b: .109803922, a: 1}
+      data:
+        first:
+          name: _Rim_Color
+        second: {r: 1, g: 1, b: 1, a: 1}

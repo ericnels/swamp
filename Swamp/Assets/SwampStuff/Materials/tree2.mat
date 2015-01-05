@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: tree2
-  m_Shader: {fileID: 7, guid: 0000000000000000f000000000000000, type: 0}
+  m_Shader: {fileID: 4800000, guid: 5f7c482f8e0ac4b76a3b71ae584d7b2e, type: 3}
   m_ShaderKeywords: []
   m_CustomRenderQueue: -1
   m_SavedProperties:
@@ -20,9 +20,61 @@ Material:
           m_Texture: {fileID: 0}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
-    m_Floats: {}
+    m_Floats:
+      data:
+        first:
+          name: _RimPower
+        second: 2.21964288
+      data:
+        first:
+          name: _Glossiness
+        second: .357142866
+      data:
+        first:
+          name: _base_height
+        second: .100000001
+      data:
+        first:
+          name: _height_blur
+        second: .699999988
+      data:
+        first:
+          name: _top_rim_offset
+        second: .5
+      data:
+        first:
+          name: _top_rim_blur
+        second: 2
+      data:
+        first:
+          name: _Vertexpower
+        second: 1
     m_Colors:
       data:
         first:
           name: _Color
         second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _DiffuseColor
+        second: {r: .176470593, g: .141176477, b: .200000003, a: 1}
+      data:
+        first:
+          name: _RimColor
+        second: {r: .588235319, g: .0901960805, b: .23137255, a: 1}
+      data:
+        first:
+          name: _SpecularColor
+        second: {r: .90196079, g: .964705884, b: .749019623, a: 1}
+      data:
+        first:
+          name: _top_color
+        second: {r: .513725519, g: .486274511, b: .239215687, a: 1}
+      data:
+        first:
+          name: _bottom_color
+        second: {r: .352941185, g: .239215687, b: .184313729, a: 1}
+      data:
+        first:
+          name: _Rim_Color
+        second: {r: .898039222, g: .933333337, b: .694117665, a: 1}

@@ -33,4 +33,5 @@ MonoBehaviour:
   - SendChatMessage
   - SetPosition
   - TaggedPlayer
+  - MonsterifyRPC
   DisableAutoOpenWizard: 0

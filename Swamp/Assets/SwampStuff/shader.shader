@@ -67,8 +67,8 @@ return c;
 				half diff = max (0, dot ( lightDir, s.Normal ));
 				
 				float nh = max (0, dot (s.Normal, h));
-				float spec = pow (nh, s.Specular*128.0);
-				
+				//float spec = pow (nh, s.Specular*128.0);
+				float spec = pow (nh, s.Specular*128);
 				half4 res;
 				res.rgb = _LightColor0.rgb * diff;
 				res.w = spec * Luminance (_LightColor0.rgb);

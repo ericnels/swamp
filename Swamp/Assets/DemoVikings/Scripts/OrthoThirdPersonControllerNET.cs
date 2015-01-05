@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 
-public class OrthoThirdPersonControllerNET : MonoBehaviour
+public class OrthoThirdPersonControllerNET : Photon.MonoBehaviour
 {
 	public Rigidbody target;
 		// The object we're steering
@@ -16,7 +16,9 @@ public class OrthoThirdPersonControllerNET : MonoBehaviour
 	public JumpDelegate onJump = null;
 		// Assign to this delegate to respond to the controller jumping
 
-	
+	public static string monsterFactor = "monstermash";
+
+	public int PlayerID;
 	
 	private const float inputThreshold = 0.01f,
 		groundDrag = 10.0f,
@@ -90,6 +92,14 @@ public class OrthoThirdPersonControllerNET : MonoBehaviour
 			return;
 		}
 
+		if (!isRemotePlayer)
+		{
+			PlayerID = PhotonNetwork.player.ID;
+			ExitGames.Client.Photon.Hashtable playersChar = new ExitGames.Client.Photon.Hashtable();
+			playersChar.Add(monsterFactor, 0f);
+			PhotonNetwork.player.SetCustomProperties(playersChar);
+		}
+
 		target.freezeRotation = true;
 			// We will be controlling the rotation of the target, so we tell the physics system to leave it be
 		walking = false;
@@ -117,34 +127,43 @@ public class OrthoThirdPersonControllerNET : MonoBehaviour
 		}
 	}
 	public void Monsterify() {
-		PhotonPlayer playa = PhotonNetwork.player; // camina en la playa
 		if (searchNight)
 		{
-			//transform.Find("Viking").localScale= (numSearchersInVacinity<10) ? (2f-.1f*numSearchersInVacinity)*transform.localScale : 1f*transform.localScale;
-			DoScale(transform.Find("Viking").localScale, (numSearchersInVacinity<10) ? (2f-.1f*numSearchersInVacinity)*transform.localScale : 1f*transform.localScale, .35f );
-			GameObject meshParent = transform.FindChild("Viking/BaseHuman").gameObject;
-			float colorFactor = (numSearchersInVacinity < 10) ? (numSearchersInVacinity)*.1f : 1f;
-			
-			Color updatedColor = new Color(colorFactor,colorFactor,colorFactor);
-			meshParent.renderer.material.color = (Color.Lerp(meshParent.renderer.material.color, updatedColor, .2f));
+			if (!isRemotePlayer) //if is local character
+			{
+				//DoScale(target.transform.Find("Viking").localScale, (numSearchersInVacinity<10) ? (2f-.1f*numSearchersInVacinity)*transform.localScale : 1f*transform.localScale, .35f );
+				GameObject meshParent = target.transform.FindChild("Viking/BaseHuman").gameObject;
+				float colorFactor = (numSearchersInVacinity < 10) ? (numSearchersInVacinity)*.1f : 1f;
+				
+				ExitGames.Client.Photon.Hashtable playersChar = new ExitGames.Client.Photon.Hashtable();
+				playersChar.Add(monsterFactor, colorFactor);
+				PhotonNetwork.player.SetCustomProperties(playersChar);
+				
+				Color updatedColor = new Color(colorFactor,colorFactor,colorFactor);
+				meshParent.renderer.material.color = (Color.Lerp(meshParent.renderer.material.color, updatedColor, .2f));
+
+				photonView.RPC ("MonsterifyRPC", PhotonTargets.All, PhotonNetwork.player.ID);
+			}
 		}
 
-		//photonView.RPC ("MonsterifyRPC", PhotonTargets.All, PhotonNetwork.player.ID);
 	}
 
-	void MonsterifyRPC()
+	[RPC]
+	void MonsterifyRPC(int monsterPlayerID)
 	{
 
-		if (searchNight)
+		if (searchNight && isRemotePlayer)
 		{
-			//transform.Find("Viking").localScale= (numSearchersInVacinity<10) ? (2f-.1f*numSearchersInVacinity)*transform.localScale : 1f*transform.localScale;
-			DoScale(transform.Find("Viking").localScale, (numSearchersInVacinity<10) ? (2f-.1f*numSearchersInVacinity)*transform.localScale : 1f*transform.localScale, .35f );
-			GameObject meshParent = transform.FindChild("Viking/BaseHuman").gameObject;
-			float colorFactor = (numSearchersInVacinity < 10) ? (numSearchersInVacinity)*.1f : 1f;
+				//DoScale(target.transform.Find("Viking").localScale, (numSearchersInVacinity<10) ? (2f-.1f*numSearchersInVacinity)*transform.localScale : 1f*transform.localScale, .35f );
+				GameObject meshParent = target.transform.FindChild("Viking/BaseHuman").gameObject;
+				float colorFactor = (float)photonView.owner.customProperties[monsterFactor];
+				
+				Color updatedColor = new Color(colorFactor,colorFactor,colorFactor);
+				meshParent.renderer.material.color = (Color.Lerp(meshParent.renderer.material.color, updatedColor, .2f));
+
 			
-			Color updatedColor = new Color(colorFactor,colorFactor,colorFactor);
-			meshParent.renderer.material.color = (Color.Lerp(meshParent.renderer.material.color, updatedColor, .2f));
 		}
+
 	}
 	
 	

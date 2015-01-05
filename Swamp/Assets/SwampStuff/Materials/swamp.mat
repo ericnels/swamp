@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: swamp
-  m_Shader: {fileID: 6, guid: 0000000000000000f000000000000000, type: 0}
+  m_Shader: {fileID: 4800000, guid: 5f7c482f8e0ac4b76a3b71ae584d7b2e, type: 3}
   m_ShaderKeywords: []
   m_CustomRenderQueue: -1
   m_SavedProperties:
@@ -24,37 +24,69 @@ Material:
       data:
         first:
           name: _Shininess
-        second: 1
+        second: .00999999978
       data:
         first:
           name: _RimPower
-        second: 1.70777202
+        second: -1
       data:
         first:
           name: _Glossiness
         second: .100000001
+      data:
+        first:
+          name: _base_height
+        second: .200000003
+      data:
+        first:
+          name: _height_blur
+        second: .699999988
+      data:
+        first:
+          name: _top_rim_offset
+        second: 0
+      data:
+        first:
+          name: _top_rim_blur
+        second: 0
+      data:
+        first:
+          name: _Vertexpower
+        second: 1
     m_Colors:
       data:
         first:
           name: _Color
-        second: {r: 0, g: 0, b: 0, a: 1}
+        second: {r: .588235319, g: .0901960805, b: .23137255, a: 1}
       data:
         first:
           name: _SpecColor
-        second: {r: .120463066, g: .808823526, b: .383659631, a: 0}
+        second: {r: .860294104, g: .128128901, b: .128128901, a: 0}
       data:
         first:
           name: _DiffuseColor
-        second: {r: 0, g: 0, b: 0, a: 1}
+        second: {r: .180392161, g: .149019614, b: .203921571, a: 1}
       data:
         first:
           name: _RimColor
-        second: {r: 0, g: .118881203, b: 1, a: 1}
+        second: {r: 0, g: 0, b: 0, a: 1}
       data:
         first:
           name: _SpecularColor
-        second: {r: 0, g: .161764681, b: .0190311577, a: 1}
+        second: {r: .921568632, g: .988235295, b: .768627465, a: 1}
+      data:
+        first:
+          name: _top_color
+        second: {r: .513725519, g: .486274511, b: .239215687, a: 1}
+      data:
+        first:
+          name: _bottom_color
+        second: {r: .352941185, g: .239215687, b: .184313729, a: 1}
+      data:
+        first:
+          name: _Rim_Color
+        second: {r: 1, g: 1, b: 1, a: 1}
       data:
         first:
           name: _Emission
-        second: {r: .117647052, g: .117647052, b: .117647052, a: 0}
+        second: {r: .463235319, g: .463235319, b: .463235319, a: 0}
