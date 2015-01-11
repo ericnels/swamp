@@ -61,6 +61,6 @@ public class OrthographicCameraNET : MonoBehaviour {
 
 	void Update()
 	{
-		camera.transform.position = new Vector3(target.transform.position.x-5, camera.transform.position.y, target.transform.position.z);
+		camera.transform.position = new Vector3((float)target.transform.position.x-5f, camera.transform.position.y, target.transform.position.z);
 	}
 }

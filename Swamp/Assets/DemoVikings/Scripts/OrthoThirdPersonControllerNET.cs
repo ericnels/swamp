@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 
 public class OrthoThirdPersonControllerNET : Photon.MonoBehaviour
@@ -19,6 +20,8 @@ public class OrthoThirdPersonControllerNET : Photon.MonoBehaviour
 	public static string monsterFactor = "monstermash";
 
 	public int PlayerID;
+
+	public List<changeRow> availableBridges;
 	
 	private const float inputThreshold = 0.01f,
 		groundDrag = 10.0f,
@@ -222,25 +225,34 @@ public class OrthoThirdPersonControllerNET : Photon.MonoBehaviour
 			
 		}
 
-		else if (Input.GetKey(KeyCode.W))
+		else if (Input.GetKeyDown(KeyCode.W))
 		{
 			//if (Quaternion.Angle(faceDown, target.transform.rotation)<1f || canTurnVertical)
-			{
+			/*{
 				isHorizontal=false;
 				rotationAmount = Quaternion.Angle(faceUp, target.transform.rotation);
 				target.transform.RotateAround (target.transform.position,target.transform.up, rotationAmount);
+			}*/
+			if (availableBridges.Count!=0)
+			{
+				availableBridges[0].crossBridge(gameObject);
 			}
 			
 		}
 
-		else if (Input.GetKey(KeyCode.S))
+		else if (Input.GetKeyDown(KeyCode.S))
 		{
 			//if (Quaternion.Angle(faceUp, target.transform.rotation)<1f || canTurnVertical)
-			{
+			/*{
 				isHorizontal=false;
 				rotationAmount = Quaternion.Angle(faceDown, target.transform.rotation);
 				target.transform.RotateAround (target.transform.position,target.transform.up, rotationAmount);
+			}*/
+			if (availableBridges.Count!=0)
+			{
+				availableBridges[0].crossBridge(gameObject);
 			}
+
 			
 		}
 

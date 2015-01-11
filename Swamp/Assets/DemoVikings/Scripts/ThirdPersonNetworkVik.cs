@@ -43,7 +43,7 @@ public class ThirdPersonNetworkVik : Photon.MonoBehaviour
             cameraScript.enabled = true;
             controllerScript.enabled = true;
             Camera.main.transform.parent = transform;
-            Camera.main.transform.localPosition = new Vector3(-5, 2, 0);
+            Camera.main.transform.localPosition = new Vector3(-5f, -.5f, 0f);
             Camera.main.transform.localEulerAngles = new Vector3(10, 0, 0);
 			Camera.main.transform.parent=null;
 			controllerScript.SetIsRemotePlayer(!photonView.isMine);

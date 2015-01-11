@@ -6,7 +6,7 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: swamp
+  m_Name: leaves
   m_Shader: {fileID: 4800000, guid: 5f7c482f8e0ac4b76a3b71ae584d7b2e, type: 3}
   m_ShaderKeywords: []
   m_CustomRenderQueue: -1
@@ -23,16 +23,8 @@ Material:
     m_Floats:
       data:
         first:
-          name: _Shininess
-        second: .00999999978
-      data:
-        first:
           name: _RimPower
-        second: -1
-      data:
-        first:
-          name: _Glossiness
-        second: .100000001
+        second: 1.01999998
       data:
         first:
           name: _base_height
@@ -57,36 +49,16 @@ Material:
       data:
         first:
           name: _Color
-        second: {r: .588235319, g: .0901960805, b: .23137255, a: 1}
-      data:
-        first:
-          name: _SpecColor
-        second: {r: .860294104, g: .128128901, b: .128128901, a: 0}
-      data:
-        first:
-          name: _DiffuseColor
-        second: {r: .180392161, g: .149019614, b: .203921571, a: 1}
-      data:
-        first:
-          name: _RimColor
-        second: {r: 0, g: 0, b: 0, a: 1}
-      data:
-        first:
-          name: _SpecularColor
-        second: {r: .921568632, g: .988235295, b: .768627465, a: 1}
+        second: {r: 1, g: 1, b: 1, a: 1}
       data:
         first:
           name: _top_color
-        second: {r: .241403535, g: .345588207, b: .29060185, a: 1}
+        second: {r: .576470613, g: .984313726, b: .781798482, a: 1}
       data:
         first:
           name: _bottom_color
-        second: {r: 0, g: 0, b: 0, a: 1}
+        second: {r: .105882354, g: .568627477, b: .105882354, a: 1}
       data:
         first:
           name: _Rim_Color
         second: {r: 1, g: 1, b: 1, a: 1}
-      data:
-        first:
-          name: _Emission
-        second: {r: .463235319, g: .463235319, b: .463235319, a: 0}

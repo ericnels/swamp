@@ -69,11 +69,11 @@ Material:
       data:
         first:
           name: _top_color
-        second: {r: .352941185, g: .239215687, b: .184313729, a: 1}
+        second: {r: 0, g: 0, b: 0, a: 1}
       data:
         first:
           name: _bottom_color
-        second: {r: .188235298, g: 0, b: .109803922, a: 1}
+        second: {r: .933333337, g: .478431374, b: .101960786, a: 1}
       data:
         first:
           name: _Rim_Color
