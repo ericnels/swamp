@@ -1,67 +1,119 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class changeRow : MonoBehaviour {
-	public bool canCross;
-	public bool hasCrossed;
+	
 	public Transform farSideDestination;
 	public Transform nearSideDestination;
-	public Transform lastPlayerPos;
 
 	void Start()
 	{
-		hasCrossed=false;
-		canCross=false;
 	}
 
 	void OnTriggerEnter(Collider other)
 	{
-		canCross=true;
-		if (other.gameObject.tag.Equals("Player"))
+		if (!other.isTrigger)
 		{
-			other.gameObject.GetComponent<OrthoThirdPersonControllerNET>().availableBridges.Add(this);
-			lastPlayerPos=other.gameObject.transform;
+
+			if (other.gameObject.tag.Equals("Player"))
+			{
+				if (!other.gameObject.GetComponent<OrthoThirdPersonControllerNET>().availableBridges.Contains(this))
+				{
+				other.gameObject.GetComponent<OrthoThirdPersonControllerNET>().availableBridges.Push(this);
+				other.gameObject.GetComponent<OrthoThirdPersonControllerNET>().canCross=true;
+				}
+			}
+			else if (other.gameObject.tag.Equals("searchparty"))
+			{
+				if (!other.gameObject.GetComponent<AIControllerNET>().availableBridges.Contains(this))
+				{
+				other.gameObject.GetComponent<AIControllerNET>().availableBridges.Push(this);
+				other.gameObject.GetComponent<AIControllerNET>().canCross=true;
+				}
+
+			}
 		}
 	}
 
 	void OnTriggerExit(Collider other)
 	{
-		canCross=false;
-		if (other.gameObject.tag.Equals("Player"))
+		if (!other.isTrigger)
 		{
-			other.gameObject.GetComponent<OrthoThirdPersonControllerNET>().availableBridges.Remove(this);
-			lastPlayerPos=other.gameObject.transform;
+			if (other.gameObject.tag.Equals("Player"))
+			{
+			other.gameObject.GetComponent<OrthoThirdPersonControllerNET>().availableBridges.Clear();
+			other.gameObject.GetComponent<OrthoThirdPersonControllerNET>().canCross=false;
+			}
+			else if (other.gameObject.tag.Equals("searchparty"))
+			{
+			other.gameObject.GetComponent<AIControllerNET>().availableBridges.Clear();
+			other.gameObject.GetComponent<AIControllerNET>().crossCooldown=false;
+			other.gameObject.GetComponent<AIControllerNET>().canCross=false;
+			}
 		}
 	}
 
 	public void crossBridge(GameObject player)
 	{
-		if (canCross)
+
+		bool? isPlayerController = player.GetComponent<OrthoThirdPersonControllerNET>()==null;
+		Debug.Log(isPlayerController.ToString());
+		bool isAI = isPlayerController ?? true;
+
+		if (isAI)
 		{
-			///ACCOUNT FOR WHEN PLAYER FACING LEFT / RIGHT
-			/// EITHER USE AN OBJECT WHOSE LOCAL AXIS DOESN'T CHANGE OR FIND WAY TO ADJUST
+			AIControllerNET controller = player.GetComponent<AIControllerNET>();
 
-			if (!hasCrossed) //go to destination
+			if (controller.canCross)
 			{
-				hasCrossed=true;
-				float dx = Mathf.Abs(farSideDestination.transform.position.x - player.transform.position.x);
-				iTween.Stop (player);
-				iTween.MoveAdd (player, new Vector3 (dx, 0, 0), 0.5f);
-				Debug.Log(dx);
-				Debug.Log("gofar");
-
-			}
-			else //return to predestination
-			{
-				hasCrossed=false;
-				float dx = -1*Mathf.Abs(nearSideDestination.transform.position.x-player.transform.position.x) ;
-				Debug.Log(dx);
-				iTween.Stop (player); 
-				iTween.MoveAdd (player, new Vector3 (dx, 0, 0), 0.5f);
-				Debug.Log("comenear");
-
+				if (player.transform.position.x < gameObject.transform.position.x) //go to destination
+				{
+					float dx = Mathf.Abs(farSideDestination.transform.position.x - player.transform.position.x);
+					iTween.Stop (player);
+					iTween.MoveAdd (player, new Vector3 ((controller.facingLeft) ? dx: -1*dx, 0, 0), 0.5f);
+					//Debug.Log(dx);
+					
+				}
+				else //return to predestination
+				{
+					float dx = -1*Mathf.Abs(nearSideDestination.transform.position.x-player.transform.position.x) ;
+					//Debug.Log(dx);
+					iTween.Stop (player); 
+					iTween.MoveAdd (player, new Vector3 ((controller.facingLeft) ? dx: -1*dx, 0, 0), 0.5f);
+					
+				}
 			}
 		}
+
+		else // not AI
+		{
+			OrthoThirdPersonControllerNET controller = player.GetComponent<OrthoThirdPersonControllerNET>();
+
+			if (controller.canCross)
+			{
+
+				if (player.transform.position.x < gameObject.transform.position.x) //go to destination
+				{
+					float dx = Mathf.Abs(farSideDestination.transform.position.x - player.transform.position.x);
+					iTween.Stop (player);
+					iTween.MoveAdd (player, new Vector3 ((controller.facingLeft) ? dx: -1*dx, 0, 0), 0.5f);
+					//Debug.Log(dx);
+
+				}
+				else //return to predestination
+				{
+					float dx = -1*Mathf.Abs(nearSideDestination.transform.position.x-player.transform.position.x) ;
+					//Debug.Log(dx);
+					iTween.Stop (player); 
+					iTween.MoveAdd (player, new Vector3 ((controller.facingLeft) ? dx: -1*dx, 0, 0), 0.5f);
+
+				}
+			}
+		}
+
 	}
+
+
 		
 }

@@ -1195,12 +1195,13 @@ MonoBehaviour:
     m_Bits: 4294967295
   groundedCheckOffset: .699999988
   PlayerID: 0
-  availableBridges: []
+  canCross: 0
   isRemotePlayer: 1
   canTurnHorizontal: 0
   canTurnVertical: 0
   isHorizontal: 1
   searchNight: 1
+  facingLeft: 0
   AISpawnPoint: {x: 0, y: 0, z: 0}
 --- !u!135 &13500000
 SphereCollider:

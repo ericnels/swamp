@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class AIControllerNET : MonoBehaviour {
 
@@ -12,7 +13,7 @@ public class AIControllerNET : MonoBehaviour {
 		Jumping
 	}
 
-	public float panic=1f; //will turn AI red for violent / low fear, and green for non-violent/ high fear
+	public float panic=.5f; //will turn AI red for violent / low fear, and green for non-violent/ high fear
 	// scale of 0-1, 0 is violent, 1 is terrified, .5 is neutral
 
 	public Rigidbody target;
@@ -29,9 +30,13 @@ public class AIControllerNET : MonoBehaviour {
 	public JumpDelegate onJump = null;
 	// Assign to this delegate to respond to the controller jumping
 	
-	bool facingLeft;
+	public bool facingLeft;
 	
 	public AIState state;
+
+	public Stack<changeRow> availableBridges;
+	public bool crossCooldown=false;
+	public bool canCross=false;
 	
 	private const float inputThreshold = 0.01f,
 	groundDrag = 10.0f,
@@ -118,6 +123,8 @@ public class AIControllerNET : MonoBehaviour {
 		faceRight = Quaternion.Euler(0f, 180f, 0f);
 		faceLeft = Quaternion.Euler(0f, 0f, 0f);
 		state=AIState.RunningLeft;
+		panic=.5f;
+		availableBridges= new Stack<changeRow>();
 	}
 
 	void ColorPanic()
@@ -127,11 +134,29 @@ public class AIControllerNET : MonoBehaviour {
 		meshParent.renderer.material.color = new Color(panic,1-panic,0f);
 
 	}
+
+	AIState CalculateState()
+	{
+		if (panic < .2f)
+		{
+			state=AIState.Shooting;
+			//Debug.Log("shot");
+		}
+		else if(panic > .9f)
+		{
+			state = AIState.Cowering;
+			//Debug.Log("cow");
+		}
+
+		return state;
+	}
 	
 	void Update ()
 	{
 
 		float rotationAmount;
+
+		state = CalculateState();
 
 		//turn to face right if not already facing right
 		if (state == AIState.RunningRight && facingLeft) //and not any other key that might combine for diff angle
@@ -177,7 +202,29 @@ public class AIControllerNET : MonoBehaviour {
 
 	}
 
-
+	bool bridgeCheck()
+	{
+		if (state== AIState.RunningLeft || state==AIState.RunningRight)
+		{
+			if (availableBridges.Count!=0 && !crossCooldown)
+			{
+				if (true) // 1/6 chance to cross or if island is last island
+				{
+					availableBridges.Pop().crossBridge(gameObject);
+					crossCooldown=true;
+					return true;
+				}
+				else
+				{
+					availableBridges.Clear(); //only check to cross bridge once per bridge
+					return false;
+				}
+			}
+			
+		}
+		return false;
+	}
+	
 	void FixedUpdate ()
 		// Handle movement here since physics will only be calculated in fixed frames anyway
 	{
@@ -193,6 +240,7 @@ public class AIControllerNET : MonoBehaviour {
 		
 		if (grounded)
 		{
+
 			target.drag = groundDrag;
 			// Apply drag when we're grounded
 			
@@ -217,7 +265,7 @@ public class AIControllerNET : MonoBehaviour {
 			{
 				Vector3 movement = 3f * target.transform.forward;
 				
-				float appliedSpeed = 1f;
+				float appliedSpeed =.4f;
 				// Scale down applied speed if in walk mode
 				
 				/*if (Input.GetAxis ("Horizontal") < 0.0f)
@@ -229,6 +277,7 @@ public class AIControllerNET : MonoBehaviour {
 				if (state == AIState.RunningLeft || state == AIState.RunningRight)
 					// Only apply movement if we have sufficient input
 				{
+					bridgeCheck(); //checks for / decides whether to cross bridges
 					target.AddForce (movement.normalized * appliedSpeed* (facingLeft ? 1: -1), ForceMode.VelocityChange);
 				}
 				else

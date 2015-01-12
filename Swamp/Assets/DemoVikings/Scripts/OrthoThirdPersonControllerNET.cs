@@ -21,7 +21,8 @@ public class OrthoThirdPersonControllerNET : Photon.MonoBehaviour
 
 	public int PlayerID;
 
-	public List<changeRow> availableBridges;
+	public Stack<changeRow> availableBridges;
+	public bool canCross=false;
 	
 	private const float inputThreshold = 0.01f,
 		groundDrag = 10.0f,
@@ -46,6 +47,8 @@ public class OrthoThirdPersonControllerNET : Photon.MonoBehaviour
 	private Quaternion faceLeft;
 	private Quaternion faceUp;
 	private Quaternion faceDown;
+
+	public bool facingLeft;
 
 	public Vector3 AISpawnPoint;
 
@@ -111,6 +114,7 @@ public class OrthoThirdPersonControllerNET : Photon.MonoBehaviour
 		faceUp = Quaternion.Euler(0f, 90f, 0f);
 		faceDown = Quaternion.Euler(0f, 270f, 0f);
 
+		availableBridges= new Stack<changeRow>();
 
 		AISpawnPoint = GameObject.Find("SearchPartySpawn").transform.position;
 	}
@@ -129,6 +133,12 @@ public class OrthoThirdPersonControllerNET : Photon.MonoBehaviour
 			numSearchersInVacinity--;
 		}
 	}
+
+	public float calculatePerception()
+	{
+		return (numSearchersInVacinity < 10) ? (numSearchersInVacinity)*.1f : 1f;
+	}
+
 	public void Monsterify() {
 		if (searchNight)
 		{
@@ -136,7 +146,7 @@ public class OrthoThirdPersonControllerNET : Photon.MonoBehaviour
 			{
 				//DoScale(target.transform.Find("Viking").localScale, (numSearchersInVacinity<10) ? (2f-.1f*numSearchersInVacinity)*transform.localScale : 1f*transform.localScale, .35f );
 				GameObject meshParent = target.transform.FindChild("Viking/BaseHuman").gameObject;
-				float colorFactor = (numSearchersInVacinity < 10) ? (numSearchersInVacinity)*.1f : 1f;
+				float colorFactor = calculatePerception();
 				
 				ExitGames.Client.Photon.Hashtable playersChar = new ExitGames.Client.Photon.Hashtable();
 				playersChar.Add(monsterFactor, colorFactor);
@@ -210,6 +220,7 @@ public class OrthoThirdPersonControllerNET : Photon.MonoBehaviour
 				isHorizontal=true;
 				rotationAmount = Quaternion.Angle(faceRight, target.transform.rotation);
 				target.transform.RotateAround (target.transform.position,target.transform.up, rotationAmount);
+				facingLeft=false;
 			}
 			
 		}
@@ -221,6 +232,7 @@ public class OrthoThirdPersonControllerNET : Photon.MonoBehaviour
 				isHorizontal=true;
 				rotationAmount = Quaternion.Angle(faceLeft, target.transform.rotation);
 				target.transform.RotateAround (target.transform.position,target.transform.up, rotationAmount);
+				facingLeft=true;
 			}
 			
 		}
@@ -235,7 +247,7 @@ public class OrthoThirdPersonControllerNET : Photon.MonoBehaviour
 			}*/
 			if (availableBridges.Count!=0)
 			{
-				availableBridges[0].crossBridge(gameObject);
+				availableBridges.Peek().crossBridge(gameObject);
 			}
 			
 		}
@@ -250,7 +262,7 @@ public class OrthoThirdPersonControllerNET : Photon.MonoBehaviour
 			}*/
 			if (availableBridges.Count!=0)
 			{
-				availableBridges[0].crossBridge(gameObject);
+				availableBridges.Peek().crossBridge(gameObject);
 			}
 
 			
